@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { generateID } from '../Utils/utils'
 import { useExpenseTrackerContext } from '../context/GlobalState'
 
+const TRANSACTION_INITIALVALUE = {
+  text: '',
+  amount: ''
+}
+
 const AddTransaction = () => {
   const { addTransaction } = useExpenseTrackerContext()
-  const [transaction, setTransaction] = useState({
-    text: '',
-    amount: ''
-  })
+  const [transaction, setTransaction] = useState(TRANSACTION_INITIALVALUE)
   const { text, amount } = transaction
 
   const handleOnChange = (event) => {
@@ -25,12 +27,17 @@ const AddTransaction = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    if (text === '' || amount === '') {
+      alert('Please add a text and amount')
+      return
+    }
     const transaction = {
       text,
       amount: +amount,
       id: generateID()
     }
     addTransaction(transaction)
+    setTransaction(TRANSACTION_INITIALVALUE)
   }
 
   return (
